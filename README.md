@@ -1,5 +1,9 @@
 # yazio
 
+```bash
+bun add yazio
+```
+
 ## Description
 
 `yazio` is a JavaScript/TypeScript module for interacting with the undocumented YAZIO API, which is used by their mobile apps.
@@ -20,8 +24,8 @@ To install dependencies:
 bun install
 ```
 
-To run:
+To develop:
 
 ```bash
-bun run src/index.ts
+bun run dev
 ```
