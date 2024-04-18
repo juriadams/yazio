@@ -1,20 +1,20 @@
-import { getTokenPair } from "@/lib/auth";
+import { getTokenPair as packageGetTokenPair } from "@/lib/auth";
 import type { Token } from "@/types/auth";
 import { resolve } from "node:path";
 
 const ENV_PATH = resolve(import.meta.path, "../../../.env");
 
 /**
- * Exchange a set of credentials (username and password) for a pair of
- * access and refresh tokens.
+ * Gets a token pair either from a previous test run or by requesting a new one.
  *
- * @param credentials
- * @returns
+ * @returns - Promise resolving the token pair.
  */
-export const getTokenPairInTests = async (credentials: {
-  username: string;
-  password: string;
-}): Promise<Token> => {
+export const getTokenPair = async (): Promise<Token> => {
+  const credentials = {
+    username: Bun.env.YAZIO_TEST_USERNAME!,
+    password: Bun.env.YAZIO_TEST_PASSWORD!,
+  };
+
   // Check if the local environment variables contain a valid token from
   // a previous test run. We do this to the able to keep running tests
   // while developing without spamming their API.
@@ -23,18 +23,14 @@ export const getTokenPairInTests = async (credentials: {
     const token = JSON.parse(Bun.env.YAZIO_TEST_TOKEN);
 
     if (token.expires_at > Date.now()) {
-      console.log("Returned token from .evn");
+      console.log("Found valid token from previous test run.");
 
       return token;
     }
   }
 
   // Retrieve a new token through our module code.
-  const token = await getTokenPair(credentials);
-
-  // Store the token in the process directly so the test command does not need
-  // to be restarted.
-  Bun.env.YAZIO_TEST_TOKEN = JSON.stringify(token);
+  const token = await packageGetTokenPair(credentials);
 
   const env = Bun.file(ENV_PATH);
 

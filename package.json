@@ -6,7 +6,8 @@
     "dev": "bun --watch test"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "zod": "^3.22.5"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

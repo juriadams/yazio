@@ -1,12 +1,18 @@
-export interface Token {
-  token_type: string;
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-  expires_at: number;
-}
+import { z } from "zod";
 
-export interface Credentials {
-  username: string;
-  password: string;
-}
+export const TokenSchema = z.object({
+  token_type: z.string(),
+  access_token: z.string(),
+  refresh_token: z.string(),
+  expires_in: z.number(),
+  expires_at: z.number(),
+});
+
+export type Token = z.infer<typeof TokenSchema>;
+
+export const CredentialsSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+
+export type Credentials = z.infer<typeof CredentialsSchema>;
