@@ -22,7 +22,11 @@ export const getTokenPairInTests = async (credentials: {
     // TODO: Use `zod` to validate the token.
     const token = JSON.parse(Bun.env.YAZIO_TEST_TOKEN);
 
-    if (token.expires_at > Date.now()) return token;
+    if (token.expires_at > Date.now()) {
+      console.log("Returned token from .evn");
+
+      return token;
+    }
   }
 
   // Retrieve a new token through our module code.
