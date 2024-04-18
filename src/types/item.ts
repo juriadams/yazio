@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { DaytimeSchema } from "@/types/natives";
+import { DaytimeSchema } from "@/types/primitives";
 
 export const ItemSchema = z.object({
   id: z.string(),
