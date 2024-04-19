@@ -1,10 +1,19 @@
 {
   "name": "yazio",
+  "version": "0.2.0",
+  "description": "A TypeScript client for interacting with YAZIO.",
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
     "dev": "bun --watch test"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./auth": "./src/auth.ts"
+  },
+  "files": [
+    "src"
+  ],
   "devDependencies": {
     "@types/bun": "latest",
     "zod": "^3.22.5"
