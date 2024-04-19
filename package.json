@@ -1,7 +1,7 @@
 {
   "name": "yazio",
-  "version": "0.2.0",
-  "description": "A TypeScript client for interacting with YAZIO.",
+  "version": "0.2.1",
+  "description": "Lightweight JS/TS client for the YAZIO API. Track calories, log items, and build integrations easily.",
   "module": "src/index.ts",
   "type": "module",
   "scripts": {

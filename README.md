@@ -23,11 +23,11 @@ npm install yazio
 Here's a quick example of how to use `yazio` in your project:
 
 ```ts
-import { getToken } from "yazio/auth";
+import { getTokenPair } from "yazio/auth";
 import { getConsumedItems } from "yazio";
 
 // Cache this token, especially in edge environments.
-const token = await getToken();
+const token = await getTokenPair({ username, password });
 
 const items = await getConsumedItems(items, { date: new Date() });
 ```
