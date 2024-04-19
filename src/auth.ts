@@ -1,1 +1,1 @@
-export { getTokenPair } from "@/lib/auth";
+export { getTokenPair, refreshTokenPair } from "@/lib/auth";

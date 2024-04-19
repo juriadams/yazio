@@ -1,6 +1,9 @@
 import type { Credentials, Token } from "@/types/auth";
 import { YazioApiError } from "@/utils/error";
 
+const YAZIO_CLIENT_ID = "1_4hiybetvfksgw40o0sog4s884kwc840wwso8go4k8c04goo4c";
+const YAZIO_CLIENT_SECRET = "6rok2m65xuskgkgogw40wkkk8sw0osg84s8cggsc4woos4s8o";
+
 let YAZIO_TOKEN_PAIR: Token | null = null;
 
 /**
@@ -29,8 +32,8 @@ export const getTokenPair = async (
     body: JSON.stringify({
       // These are the credentials of their own OAuth application they use to
       // communicate with their own API.
-      client_id: "1_4hiybetvfksgw40o0sog4s884kwc840wwso8go4k8c04goo4c",
-      client_secret: "6rok2m65xuskgkgogw40wkkk8sw0osg84s8cggsc4woos4s8o",
+      client_id: YAZIO_CLIENT_ID,
+      client_secret: YAZIO_CLIENT_SECRET,
       username,
       password,
       grant_type: "password",
@@ -52,4 +55,39 @@ export const getTokenPair = async (
   YAZIO_TOKEN_PAIR = token;
 
   return token;
+};
+
+/**
+ * Refresh a previously expired token pair.
+ *
+ * @param token - Token object containing the key pairs.
+ *
+ * @returns - Promise resolving to a Token object containing the refreshed key.
+ */
+export const refreshTokenPair = async (token: Token): Promise<Token> => {
+  const res = await fetch(`https://yzapi.yazio.com/v10/oauth/token`, {
+    method: "POST",
+    body: JSON.stringify({
+      client_id: YAZIO_CLIENT_ID,
+      client_secret: YAZIO_CLIENT_SECRET,
+      refresh_token: token.refresh_token,
+      grant_type: "refresh_token",
+    }),
+  }).then((res) => {
+    if (!res.ok)
+      throw new YazioApiError(`Error refreshing token pair.`, {
+        details: `Received ${res.status} (${res.statusText}).`,
+      });
+
+    return res.json() as Promise<Token>;
+  });
+
+  const refreshedToken = {
+    ...res,
+    expires_at: Date.now() + res.expires_in * 1000,
+  };
+
+  YAZIO_TOKEN_PAIR = refreshedToken;
+
+  return refreshedToken;
 };
