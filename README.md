@@ -36,16 +36,16 @@ Here's a quick example of how to use `yazio` in your project:
 
 ```ts
 import { getToken } from "yazio/auth";
-import { getDailySummary } from "yazio";
+import { getConsumedItems } from "yazio";
 
 // This token is already being cached in memory internally. However, when using
 // this library in an edge environment, it is adviced to cache this token in KV
 // or similar.
 const token = await getToken();
 
-const dailySummary = await getDailySummary(token);
+const items = await getConsumedItems(items, { date: new Date() });
 
-console.log(dailySummary);
+console.log(items);
 ```
 
 For more detailed usage instructions and examples, please refer to the documentation in the source code. All functions are scoped to individual categories and can be found in `src/lib`.

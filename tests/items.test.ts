@@ -1,28 +1,28 @@
-import { getDailySummary } from "@/lib/summary";
-import { DailySummarySchema } from "@/types/summary";
+import { getConsumedItems } from "@/lib/items";
+import { UserConsumedItems } from "@/types/api/items";
 import { describe, test, expect } from "bun:test";
 import { getTokenPair } from "tests/utils/auth";
 
-describe("summary", () => {
-  test("get daily summary", async () => {
+describe("items", () => {
+  test("get consumed items for today", async () => {
     const token = await getTokenPair();
-    const summary = await getDailySummary(token);
+    const items = await getConsumedItems(token);
 
     // Validate the schema of the returned data.
-    const res = DailySummarySchema.safeParse(summary);
+    const res = UserConsumedItems.safeParse(items);
     if (!res.success) console.error(res.error);
 
     expect(res.success).toBe(true);
   });
 
-  test("get daily summary for the day before", async () => {
+  test("get consumed items for the day before", async () => {
     const token = await getTokenPair();
-    const summary = await getDailySummary(token, {
+    const items = await getConsumedItems(token, {
       date: new Date(Date.now() - 24 * 60 * 60 * 1000),
     });
 
     // Validate the schema of the returned data.
-    const res = DailySummarySchema.safeParse(summary);
+    const res = UserConsumedItems.safeParse(items);
     if (!res.success) console.error(res.error);
 
     expect(res.success).toBe(true);
