@@ -8,6 +8,7 @@ describe("auth", () => {
 
     // Validate the schema of the returned data.
     const res = TokenSchema.safeParse(token);
+    if (!res.success) console.error(res.error);
 
     expect(res.success).toBe(true);
   });

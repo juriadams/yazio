@@ -1,10 +1,11 @@
 import { z } from "zod";
-import { ItemSchema } from "@/types/item";
+import { ConsumedItemSchema } from "@/types/api/items";
 
 export const DailySummarySchema = z.object({
-  products: ItemSchema.array(),
-  recipe_portions: z.array(z.unknown()),
-  simple_products: z.array(z.unknown()),
+  breakfast: ConsumedItemSchema.array(),
+  lunch: ConsumedItemSchema.array(),
+  dinner: ConsumedItemSchema.array(),
+  snack: ConsumedItemSchema.array(),
 });
 
 export type DailySummary = z.infer<typeof DailySummarySchema>;

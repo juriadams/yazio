@@ -1,6 +1,5 @@
 import type { Credentials, Token } from "@/types/auth";
 import { YazioApiError } from "@/utils/error";
-import { YAZIO_CLIENT_ID, YAZUO_CLIENT_SECRET } from "@/client";
 
 let YAZIO_TOKEN_PAIR: Token | null = null;
 
@@ -28,8 +27,10 @@ export const getTokenPair = async (
   const res = await fetch(`https://yzapi.yazio.com/v10/oauth/token`, {
     method: "POST",
     body: JSON.stringify({
-      client_id: YAZIO_CLIENT_ID,
-      client_secret: YAZUO_CLIENT_SECRET,
+      // These are the credentials of their own OAuth application they use to
+      // communicate with their own API.
+      client_id: "1_4hiybetvfksgw40o0sog4s884kwc840wwso8go4k8c04goo4c",
+      client_secret: "6rok2m65xuskgkgogw40wkkk8sw0osg84s8cggsc4woos4s8o",
       username,
       password,
       grant_type: "password",
