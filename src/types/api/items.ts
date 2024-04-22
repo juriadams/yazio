@@ -4,6 +4,7 @@ import { DaytimeSchema } from "@/types/primitives";
 
 export const ConsumedItemSchema = z.object({
   id: z.string(),
+  product_id: z.string(),
   date: z.string(),
   daytime: DaytimeSchema,
   type: z.literal("product"),
