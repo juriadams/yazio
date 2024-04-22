@@ -1,12 +1,12 @@
 {
   "name": "yazio",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Lightweight JS/TS client for the YAZIO API. Track calories, log items, and build integrations easily.",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "bun --watch test",
-    "bundle": "tsup src/index.ts src/auth.ts src/types.ts src/api.ts --minify --dts --format esm"
+    "bundle": "tsup src/index.ts src/auth.ts src/types.ts src/api.ts --minify --dts --format esm,cjs"
   },
   "exports": {
     ".": {
