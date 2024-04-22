@@ -2,10 +2,15 @@ import type { ConsumedItem, UserConsumedItems } from "@/types/api/items";
 import type { Token } from "@/types/auth";
 import { parseDate } from "@/utils/date";
 import { YazioApiError } from "@/utils/error";
+import { z } from "zod";
 
-interface GetConsumedItemOptions {
-  date?: Date;
-}
+export const GetConsumedItemOptionsSchema = z.object({
+  date: z.date().optional(),
+});
+
+export type GetConsumedItemOptions = z.infer<
+  typeof GetConsumedItemOptionsSchema
+>;
 
 /**
  * Get the consumed items for a specific day.
@@ -35,15 +40,20 @@ export const getConsumedItems = async (
   });
 };
 
-interface AddConsumedItemOptions {
-  date?: Date;
-}
+export const AddConsumedItemOptionsSchema = z.object({
+  date: z.date().optional(),
+});
+
+export type AddConsumedItemOptions = z.infer<
+  typeof AddConsumedItemOptionsSchema
+>;
 
 /**
  * Add a consumed item to the user's diary.
  *
  * @param token - Token to use for authentication.
  * @param product - Details about the item to add.
+ * @param options - Options for the request.
  *
  * @returns - Promise resolving a currently unknown response.
  */

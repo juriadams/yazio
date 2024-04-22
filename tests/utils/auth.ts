@@ -31,7 +31,7 @@ export const getTokenPair = async (): Promise<Token> => {
   const env = Bun.file(ENV_PATH);
 
   // Update the .env file with the new token so it can be reused.
-  const current = env.text();
+  const current = await env.text();
   Bun.write(
     ENV_PATH,
     current + `\nYAZIO_TEST_TOKEN="${JSON.stringify(token)}"`

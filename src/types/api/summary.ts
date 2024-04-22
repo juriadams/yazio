@@ -47,10 +47,10 @@ export const UnitsSchema = z.object({
 export type Units = z.infer<typeof UnitsSchema>;
 
 export const UserSchema = z.object({
-  start_weight: z.number(),
-  current_weight: z.number(),
-  goal: z.string(),
-  sex: z.string(),
+  start_weight: z.number().optional(),
+  current_weight: z.number().optional(),
+  goal: z.string().optional(),
+  sex: z.string().optional(),
 });
 
 export type User = z.infer<typeof UserSchema>;

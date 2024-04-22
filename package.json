@@ -6,12 +6,16 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "bun --watch test",
-    "bundle": "tsup src/index.ts src/auth.ts src/types.ts --minify --dts --format cjs,esm"
+    "bundle": "tsup src/index.ts src/auth.ts src/types.ts src/api.ts --minify --dts --format esm"
   },
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./api": {
+      "import": "./dist/api.js",
+      "require": "./dist/api.cjs"
     },
     "./auth": {
       "import": "./dist/auth.js",

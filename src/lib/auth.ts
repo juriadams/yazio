@@ -1,5 +1,10 @@
-import type { Credentials, Token } from "@/types/auth";
-import { YazioApiError } from "@/utils/error";
+import {
+  YazioAuthInitSchema,
+  type Credentials,
+  type Token,
+  type YazioAuthInit,
+} from "@/types/auth";
+import { YazioAuthError } from "@/utils/error";
 
 const YAZIO_CLIENT_ID = "1_4hiybetvfksgw40o0sog4s884kwc840wwso8go4k8c04goo4c";
 const YAZIO_CLIENT_SECRET = "6rok2m65xuskgkgogw40wkkk8sw0osg84s8cggsc4woos4s8o";
@@ -25,7 +30,7 @@ export const getTokenPair = async (
   const { username, password } = credentials;
 
   if (!username || !password)
-    throw new YazioApiError("Incomplete or missing credentials provided.");
+    throw new YazioAuthError("Incomplete or missing credentials provided.");
 
   const res = await fetch(`https://yzapi.yazio.com/v10/oauth/token`, {
     method: "POST",
@@ -41,7 +46,7 @@ export const getTokenPair = async (
   });
 
   if (!res.ok)
-    throw new YazioApiError(`Error fetching token pair.`, {
+    throw new YazioAuthError(`Error fetching token pair.`, {
       details: `Received ${res.status} (${res.statusText}).`,
     });
 
@@ -75,7 +80,7 @@ export const refreshTokenPair = async (token: Token): Promise<Token> => {
     }),
   }).then((res) => {
     if (!res.ok)
-      throw new YazioApiError(`Error refreshing token pair.`, {
+      throw new YazioAuthError(`Error refreshing token pair.`, {
         details: `Received ${res.status} (${res.statusText}).`,
       });
 
@@ -91,3 +96,39 @@ export const refreshTokenPair = async (token: Token): Promise<Token> => {
 
   return refreshedToken;
 };
+
+export class YazioAuth {
+  private token: Token | null = null;
+  private credentials: Credentials | null = null;
+
+  /**
+   * Get a valid token pair for the current session.
+   *
+   * @returns - Promise resolving to a Token object containing the key pairs.
+   */
+  public authenticate = async (): Promise<Token> => {
+    // If a token was previously provided or stored, use it.
+    if (this.token) {
+      // If the stored token is still valid, return it.
+      if (this.token.expires_at > Date.now()) return this.token;
+
+      // Refresh the token if it has expired.
+      return (this.token = await refreshTokenPair(this.token));
+    }
+
+    // If credentials were provided, fetch a new token.
+    return (this.token = await getTokenPair(this.credentials!));
+  };
+
+  constructor(init: YazioAuthInit) {
+    const res = YazioAuthInitSchema.safeParse(init);
+
+    if (!res.success)
+      throw new YazioAuthError("Invalid initialization object provided.", {
+        details: res.error.errors.join(", "),
+      });
+
+    if (res.data.token) this.token = res.data.token;
+    if (res.data.credentials) this.credentials = res.data.credentials;
+  }
+}

@@ -16,3 +16,20 @@ export const CredentialsSchema = z.object({
 });
 
 export type Credentials = z.infer<typeof CredentialsSchema>;
+
+export const YazioAuthInitSchema = z.union([
+  z.object({
+    credentials: CredentialsSchema,
+    token: z.undefined(),
+  }),
+  z.object({
+    credentials: z.undefined(),
+    token: TokenSchema,
+  }),
+  z.object({
+    credentials: CredentialsSchema,
+    token: TokenSchema,
+  }),
+]);
+
+export type YazioAuthInit = z.infer<typeof YazioAuthInitSchema>;

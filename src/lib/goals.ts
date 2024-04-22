@@ -3,10 +3,13 @@ import type { Token } from "@/types/auth";
 import type { Goals } from "@/types/goals";
 import { parseDate } from "@/utils/date";
 import { YazioApiError } from "@/utils/error";
+import { z } from "zod";
 
-interface GetGoalsOptions {
-  date?: Date;
-}
+export const GetGoalsOptionsSchema = z.object({
+  date: z.date().optional(),
+});
+
+export type GetGoalsOptions = z.infer<typeof GetGoalsOptionsSchema>;
 
 export const getGoals = async (
   token: Token,

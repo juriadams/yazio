@@ -1,1 +1,1 @@
-export { getTokenPair, refreshTokenPair } from "@/lib/auth";
+export { YazioAuth } from "@/lib/auth";

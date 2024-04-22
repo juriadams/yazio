@@ -3,9 +3,15 @@ import type { Token } from "@/types/auth";
 import { parseDate } from "@/utils/date";
 import { YazioApiError } from "@/utils/error";
 
-interface GetDailySummaryOptions {
-  date?: Date;
-}
+import { z } from "zod";
+
+export const GetDailySummaryOptionsSchema = z.object({
+  date: z.date().optional(),
+});
+
+export type GetDailySummaryOptions = z.infer<
+  typeof GetDailySummaryOptionsSchema
+>;
 
 /**
  * Get the daily summary for a specific day.
