@@ -1,5 +1,6 @@
 import type { Token } from "@/types/auth";
 import { DaytimeSchema } from "@/types/yazio";
+import { parseDate } from "@/utils/date";
 import { fetchYazio } from "@/utils/fetch";
 import { z } from "zod";
 
@@ -41,8 +42,11 @@ export const getUserConsumedItems = async (
   recipe_portions: Array<unknown>;
   simple_products: Array<unknown>;
 }> =>
-  fetchYazio(`/user/consumed-items?date=${options?.date}`, {
-    headers: {
-      Authorization: `Bearer ${token.access_token}`,
-    },
-  });
+  fetchYazio(
+    `/user/consumed-items?date=${parseDate(options?.date ?? new Date())}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );
