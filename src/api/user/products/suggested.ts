@@ -15,7 +15,7 @@ type GetUserSuggestedProductsOptions = z.infer<
 
 export const UserSuggestedProductSchema = z.object({
   product_id: z.string().uuid(),
-  amount: z.number(),
+  amount: z.number().positive(),
   serving: z.string().nullable(),
   serving_quantity: z.number().nullable(),
 });

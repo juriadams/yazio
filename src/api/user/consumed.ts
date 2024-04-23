@@ -18,7 +18,7 @@ export const UserConsumedItemSchema = z.object({
   daytime: DaytimeSchema,
   type: z.string(),
   product_id: z.string().uuid(),
-  amount: z.number().nullable(),
+  amount: z.number().positive(),
   serving: z.string().nullable(),
   serving_quantity: z.number().nullable(),
 });
