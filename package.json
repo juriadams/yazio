@@ -1,6 +1,6 @@
 {
   "name": "yazio",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Lightweight JS/TS client for the YAZIO API. Track calories, log items, and build integrations easily.",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
