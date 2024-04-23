@@ -39,6 +39,7 @@ export const ServingSchema = z.object({
 export type Serving = z.infer<typeof ServingSchema>;
 
 export const ProductSchema = z.object({
+  id: z.string().uuid(),
   name: z.string(),
   is_verified: z.boolean(),
   is_private: z.boolean(),
