@@ -57,7 +57,7 @@ export const searchProducts = async (
   });
 
   return fetchYazio<Array<ProductSearchResult>>(
-    `/products/search${queryParams}`,
+    `/products/search?${queryParams}`,
     {
       headers: {
         Authorization: `Bearer ${token.access_token}`,
