@@ -1,6 +1,6 @@
 {
   "name": "yazio",
-  "version": "0.8.0",
+  "version": "1.0.1",
   "description": "Lightweight JS/TS client for the YAZIO API. Track calories, log items, and build integrations easily.",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -20,10 +20,6 @@
     "./auth": {
       "import": "./dist/auth.js",
       "require": "./dist/auth.cjs"
-    },
-    "./types": {
-      "import": "./dist/types.d.ts",
-      "require": "./dist/types.d.ts"
     }
   },
   "files": [
@@ -32,9 +28,7 @@
   "devDependencies": {
     "@types/bun": "latest",
     "tsup": "^8.0.2",
-    "zod": "^3.22.5"
-  },
-  "peerDependencies": {
+    "zod": "^3.22.5",
     "typescript": "^5.0.0"
   }
 }

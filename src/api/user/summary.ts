@@ -1,17 +1,18 @@
+import type { Token } from "@/types/auth";
+import { parseDate } from "@/utils/date";
+import { fetchYazio } from "@/utils/fetch";
 import { z } from "zod";
+import { BasicNutrientsSchema } from "@/api/products/search";
 
-export const NutrientsSchema = z.object({
-  "energy.energy": z.number(),
-  "nutrient.carb": z.number(),
-  "nutrient.fat": z.number(),
-  "nutrient.protein": z.number(),
+const GetUserDailySummaryOptions = z.object({
+  date: z.date().optional(),
 });
 
-export type Nutrients = z.infer<typeof NutrientsSchema>;
+type GetUserDailySummaryOptions = z.infer<typeof GetUserDailySummaryOptions>;
 
 export const MealSchema = z.object({
   energy_goal: z.number(),
-  nutrients: NutrientsSchema,
+  nutrients: BasicNutrientsSchema,
 });
 
 export type Meal = z.infer<typeof MealSchema>;
@@ -68,3 +69,26 @@ export const UserDailySummarySchema = z.object({
 });
 
 export type UserDailySummary = z.infer<typeof UserDailySummarySchema>;
+
+/**
+ * Get the daily summary for a specific day.
+ *
+ * @param token - Token to use for authentication.
+ * @param options - Options for the request.
+ *
+ * @returns - Promise resolving the daily summary.
+ */
+export const getUserDailySummary = async (
+  token: Token,
+  options?: GetUserDailySummaryOptions
+): Promise<UserDailySummary> =>
+  fetchYazio<UserDailySummary>(
+    `/user/widgets/daily-summary?date=${parseDate(
+      options?.date ?? new Date()
+    )}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    }
+  );

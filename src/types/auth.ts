@@ -10,6 +10,13 @@ export const TokenSchema = z.object({
 
 export type Token = z.infer<typeof TokenSchema>;
 
+export const TokenResolverSchema = z.union([
+  TokenSchema,
+  z.function().returns(z.union([TokenSchema, z.promise(TokenSchema)])),
+]);
+
+export type TokenResolver = z.infer<typeof TokenResolverSchema>;
+
 export const CredentialsSchema = z.object({
   username: z.string(),
   password: z.string(),
@@ -17,18 +24,39 @@ export const CredentialsSchema = z.object({
 
 export type Credentials = z.infer<typeof CredentialsSchema>;
 
+export const CredentialsResolverSchema = z.union([
+  CredentialsSchema,
+  z.promise(CredentialsSchema),
+  z
+    .function()
+    .returns(z.union([CredentialsSchema, z.promise(CredentialsSchema)])),
+  z.promise(CredentialsSchema),
+]);
+
+export type CredentialsResolver = z.infer<typeof CredentialsResolverSchema>;
+
+export const RefreshHandlerSchema = z
+  .function()
+  .args(z.object({ token: TokenSchema }))
+  .returns(z.any());
+
+export type RefreshHandler = z.infer<typeof RefreshHandlerSchema>;
+
 export const YazioAuthInitSchema = z.union([
   z.object({
-    credentials: CredentialsSchema,
+    credentials: CredentialsResolverSchema,
     token: z.undefined(),
+    onRefresh: RefreshHandlerSchema.optional(),
   }),
   z.object({
     credentials: z.undefined(),
-    token: TokenSchema,
+    token: TokenResolverSchema,
+    onRefresh: RefreshHandlerSchema.optional(),
   }),
   z.object({
-    credentials: CredentialsSchema,
-    token: TokenSchema,
+    credentials: CredentialsResolverSchema,
+    token: TokenResolverSchema,
+    onRefresh: RefreshHandlerSchema.optional(),
   }),
 ]);
 

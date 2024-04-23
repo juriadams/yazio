@@ -1,3 +1,5 @@
+import type { Token } from "@/types/auth";
+import { fetchYazio } from "@/utils/fetch";
 import { z } from "zod";
 
 export const UserSettingsSchema = z.object({
@@ -14,3 +16,17 @@ export const UserSettingsSchema = z.object({
 });
 
 export type UserSettings = z.infer<typeof UserSettingsSchema>;
+
+/**
+ * Get the user settings.
+ *
+ * @param token - The token to use for authentication.
+ *
+ * @returns - Promise resolving to the user settings.
+ */
+export const getUserSettings = async (token: Token): Promise<UserSettings> =>
+  fetchYazio<UserSettings>(`/user/settings`, {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
