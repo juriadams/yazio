@@ -41,6 +41,8 @@ export class YazioAuth {
   private token: TokenResolver | null = null;
   private credentials: CredentialsResolver | null = null;
 
+  private cachedToken: Token | null = null;
+
   private onRefresh: RefreshHandler | null = null;
 
   /**
@@ -49,11 +51,19 @@ export class YazioAuth {
    * @returns - Promise resolving to a Token object containing the key pairs.
    */
   public authenticate = async (): Promise<Token> => {
+    // If a token was previously fetched and is still valid, re-use it.
+    if (this.cachedToken && this.cachedToken.expires_at > Date.now())
+      return this.cachedToken;
+
     const token = await resolveToken(this.token);
 
-    // If a token was provided or previously stored and it is not expired yet,
-    // return it.
-    if (token && token.expires_at > Date.now()) return token;
+    // If a token resolve is provided, resolve the token and return it
+    // if it is still valid.
+    if (token && token.expires_at > Date.now()) {
+      this.cachedToken = token;
+
+      return token;
+    }
 
     const credentials = await resolveCredentials(this.credentials);
     if (!credentials)
@@ -79,7 +89,7 @@ export class YazioAuth {
 
     if (!res.success)
       throw new Error(
-        "No credentials or token provided. At least one of them is required."
+        `Could not parse given YazioAuthInit object. Please make sure it is in the correct format.`
       );
 
     if (res.data.token) this.token = res.data.token;

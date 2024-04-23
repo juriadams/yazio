@@ -14,7 +14,13 @@ export const TokenResolverSchema = z.union([
   TokenSchema,
   z
     .function()
-    .returns(z.union([TokenSchema, z.promise(TokenSchema), z.null()])),
+    .returns(
+      z.union([
+        TokenSchema,
+        z.promise(z.union([TokenSchema, z.null()])),
+        z.null(),
+      ])
+    ),
 ]);
 
 export type TokenResolver = z.infer<typeof TokenResolverSchema>;
@@ -32,7 +38,11 @@ export const CredentialsResolverSchema = z.union([
   z
     .function()
     .returns(
-      z.union([CredentialsSchema, z.promise(CredentialsSchema), z.null()])
+      z.union([
+        CredentialsSchema,
+        z.promise(z.union([CredentialsSchema, z.null()])),
+        z.null(),
+      ])
     ),
   z.promise(CredentialsSchema),
 ]);
