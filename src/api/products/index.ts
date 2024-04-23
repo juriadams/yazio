@@ -73,4 +73,4 @@ export const getProduct = async (
     headers: {
       Authorization: `Bearer ${token.access_token}`,
     },
-  });
+  }).then((product) => (product ? { ...product, id } : null));
