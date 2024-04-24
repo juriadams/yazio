@@ -23,13 +23,43 @@ npm install yazio
 Here's a quick example of how to use `yazio` in your project:
 
 ```ts
-import { getTokenPair } from "yazio/auth";
-import { getConsumedItems } from "yazio";
+// Basic Usage
 
-// Cache this token, especially in edge environments.
-const token = await getTokenPair({ username, password });
+import { Yazio } from "yazio";
 
-const items = await getConsumedItems(items, { date: new Date() });
+const yazio = new Yazio({
+  credentials: {
+    username: "juri@acme.co",
+    password: "super-secure-password",
+  },
+});
+
+const items = await getConsumedItems({ date: new Date(/* ... */) });
 ```
 
-See source code docs in `src/lib` for detailed usage. Documentation following shortly.
+```ts
+// Advanced Usage
+
+import { Yazio } from "yazio";
+import { kv } from "@vercel/kv";
+
+const yazio = new Yazio({
+  // Resolve cached tokens from KV. Tokens are stored and re-used from memory
+  // as long as they are still valid.
+  token: kv.get("tokens:juri@acme.co"),
+
+  // If a fresh token was received, cache it.
+  onRefresh: ({ token }) =>
+    kv.set("tokens:juri@acme.co", JSON.stringify(token)),
+
+  // If no token was fetched yet, exchange the credentials for a new token.
+  credentials: {
+    username: "juri@acme.co",
+    password: "super-secure-password",
+  },
+});
+
+const summary = await yazio.user.getSummary({ date: new Date(/* ... */) });
+```
+
+See source code docs in `src/index.ts` for detailed usage. Documentation following shortly.
