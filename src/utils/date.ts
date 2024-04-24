@@ -5,7 +5,8 @@
  *
  * @returns - The date as a string.
  */
-export const parseDate = (date: Date): string =>
-  `${date.getFullYear()}-${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+export const parseDate = (input: Date | string): string => {
+  const date = typeof input === "string" ? new Date(input) : input;
+
+  return date.toISOString().split("T")[0];
+};

@@ -4,7 +4,7 @@ import { fetchYazio } from "@/utils/fetch";
 import { z } from "zod";
 
 const GetUserWaterIntakeOptionsSchema = z.object({
-  date: z.date().optional(),
+  date: z.union([z.date(), z.string()]).optional(),
 });
 
 type GetUserWaterIntakeOptions = z.infer<

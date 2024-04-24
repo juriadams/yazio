@@ -5,7 +5,7 @@ import { z } from "zod";
 import { BasicNutrientsSchema } from "@/api/products/search";
 
 const GetUserDailySummaryOptions = z.object({
-  date: z.date().optional(),
+  date: z.union([z.date(), z.string()]).optional(),
 });
 
 type GetUserDailySummaryOptions = z.infer<typeof GetUserDailySummaryOptions>;

@@ -5,7 +5,7 @@ import { fetchYazio } from "@/utils/fetch";
 import { z } from "zod";
 
 const GetUserConsumedItemsOptionsSchema = z.object({
-  date: z.date().optional(),
+  date: z.union([z.date(), z.string()]).optional(),
 });
 
 type GetUserConsumedItemsOptions = z.infer<
@@ -51,15 +51,26 @@ export const getUserConsumedItems = async (
     }
   );
 
-const AddUserConsumedItemsOptionsSchema = z.object({
-  id: z.string().uuid(),
-  product_id: z.string().uuid(),
-  date: z.date().optional(),
-  daytime: DaytimeSchema,
-  amount: z.number().positive(),
-  serving: z.string().nullable(),
-  serving_quantity: z.number().nullable(),
-});
+const AddUserConsumedItemsOptionsSchema = z.union([
+  z.object({
+    id: z.string().uuid(),
+    product_id: z.string().uuid(),
+    date: z.union([z.date(), z.string()]),
+    daytime: DaytimeSchema,
+    amount: z.null(),
+    serving: z.string(),
+    serving_quantity: z.number(),
+  }),
+  z.object({
+    id: z.string().uuid(),
+    product_id: z.string().uuid(),
+    date: z.union([z.date(), z.string()]),
+    daytime: DaytimeSchema,
+    amount: z.number(),
+    serving: z.null(),
+    serving_quantity: z.null(),
+  }),
+]);
 
 type AddUserConsumedItemsOptions = z.infer<
   typeof AddUserConsumedItemsOptionsSchema

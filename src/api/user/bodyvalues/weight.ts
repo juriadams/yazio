@@ -4,7 +4,7 @@ import { fetchYazio } from "@/utils/fetch";
 import { z } from "zod";
 
 const GetUserWeightOptionsSchema = z.object({
-  date: z.date().optional(),
+  date: z.union([z.date(), z.string()]).optional(),
 });
 
 type GetUserWeightOptions = z.infer<typeof GetUserWeightOptionsSchema>;
