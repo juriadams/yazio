@@ -24,5 +24,7 @@ export const fetchYazio = <T>(
         `Error fetching \`${input}\`. (${res.status} ${res.statusText})`
       );
 
+    if (res.status === 204) return Promise.resolve() as Promise<T>;
+
     return res.json() as Promise<T>;
   });
