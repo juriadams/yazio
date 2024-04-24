@@ -50,3 +50,76 @@ export const getUserConsumedItems = async (
       },
     }
   );
+
+const AddUserConsumedItemsOptionsSchema = z.object({
+  id: z.string().uuid(),
+  product_id: z.string().uuid(),
+  date: z.date().optional(),
+  daytime: DaytimeSchema,
+  amount: z.number().positive(),
+  serving: z.string().nullable(),
+  serving_quantity: z.number().nullable(),
+});
+
+type AddUserConsumedItemsOptions = z.infer<
+  typeof AddUserConsumedItemsOptionsSchema
+>;
+
+/**
+ * Add a consumed item to the users diary.
+ *
+ * @param token - The token to use for authentication.
+ * @param entry - Details about the product to add.
+ *
+ * @returns - Promise resolving when the item was added successfully.
+ */
+export const addUserConsumedItem = async (
+  token: Token,
+  entry: AddUserConsumedItemsOptions
+): Promise<void> =>
+  await fetchYazio("/user/consumed-items", {
+    method: "POST",
+    body: JSON.stringify({
+      recipe_portions: [],
+      simple_products: [],
+      products: [
+        {
+          id: entry.id,
+          product_id: entry.product_id,
+          date: parseDate(entry.date ?? new Date()),
+          daytime: entry.daytime,
+          amount: entry.amount,
+          serving: entry.serving,
+          serving_quantity: entry.serving_quantity,
+        },
+      ],
+    }),
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+/**
+ * Remove a consumed item from the users diary.
+ *
+ * @param token - The token to use for authentication.
+ * @param entry - The ID of the consumed item to remove.
+ *
+ * **Warning:** The `entry` parameter is the ID of the consumed item, not the
+ * ID of the product.
+ *
+ * @returns - Promise resolving when the item was removed successfully.
+ */
+export const removeUserConsumedItem = async (
+  token: Token,
+  entry: AddUserConsumedItemsOptions["id"]
+): Promise<void> =>
+  fetchYazio("/user/consumed-items", {
+    method: "DELETE",
+    body: JSON.stringify([entry]),
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+      "Content-Type": "application/json",
+    },
+  });

@@ -3,9 +3,14 @@ export { getTokenFromCredentials } from "@/api/oauth/token";
 export { getProduct } from "@/api/products";
 export { searchProducts } from "@/api/products/search";
 
+export {
+  getUserConsumedItems,
+  addUserConsumedItem,
+  removeUserConsumedItem,
+} from "@/api/user/consumed";
+
 export { getUserWeight } from "@/api/user/bodyvalues/weight";
 export { getUserSuggestedProducts } from "@/api/user/products/suggested";
-export { getUserConsumedItems } from "@/api/user/consumed";
 export { getUserDietaryPreferences } from "@/api/user/diet";
 export { getUserExercises } from "@/api/user/exercises";
 export { getUserGoals } from "@/api/user/goals";

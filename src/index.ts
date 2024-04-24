@@ -16,6 +16,8 @@ import {
   getUserWeight,
   searchProducts,
   getUserDailySummary,
+  addUserConsumedItem,
+  removeUserConsumedItem,
 } from "@/api";
 
 class Products {
@@ -48,10 +50,6 @@ class User {
     options: Parameters<typeof getUserSuggestedProducts>[1]
   ) => getUserSuggestedProducts(await this.auth.authenticate(), options);
 
-  public getConsumedItems = async (
-    options: Parameters<typeof getUserConsumedItems>[1]
-  ) => getUserConsumedItems(await this.auth.authenticate(), options);
-
   public getDietaryPreferences = async () =>
     getUserDietaryPreferences(await this.auth.authenticate());
 
@@ -72,6 +70,18 @@ class User {
   public getDailySummary = async (
     options: Parameters<typeof getUserDailySummary>[1]
   ) => getUserDailySummary(await this.auth.authenticate(), options);
+
+  public getConsumedItems = async (
+    options: Parameters<typeof getUserConsumedItems>[1]
+  ) => getUserConsumedItems(await this.auth.authenticate(), options);
+
+  public addConsumedItem = async (
+    options: Parameters<typeof addUserConsumedItem>[1]
+  ) => addUserConsumedItem(await this.auth.authenticate(), options);
+
+  public removeConsumedItem = async (
+    options: Parameters<typeof removeUserConsumedItem>[1]
+  ) => removeUserConsumedItem(await this.auth.authenticate(), options);
 }
 
 export class Yazio {
