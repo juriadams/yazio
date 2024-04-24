@@ -57,7 +57,7 @@ const AddUserConsumedItemsOptionsSchema = z.union([
     product_id: z.string().uuid(),
     date: z.union([z.date(), z.string()]),
     daytime: DaytimeSchema,
-    amount: z.null(),
+    amount: z.number(),
     serving: z.string(),
     serving_quantity: z.number(),
   }),

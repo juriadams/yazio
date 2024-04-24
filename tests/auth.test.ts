@@ -1,6 +1,6 @@
 import { describe, test, expect } from "bun:test";
 
-import { YazioAuth } from "@/lib/auth";
+import { YazioAuth } from "@/auth";
 import { TokenSchema, type Token } from "@/types/auth";
 
 describe("auth", () => {
