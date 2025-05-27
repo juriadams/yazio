@@ -18,6 +18,7 @@ import {
   getUserDailySummary,
   addUserConsumedItem,
   removeUserConsumedItem,
+  getRecipe,
 } from "@/api";
 
 class Products {
@@ -32,6 +33,17 @@ class Products {
 
   public search = async (options: Parameters<typeof searchProducts>[1]) =>
     searchProducts(await this.auth.authenticate(), options);
+}
+
+class Recipes {
+  private auth: YazioAuth;
+
+  constructor(auth: YazioAuth) {
+    this.auth = auth;
+  }
+
+  public get = async (id: Parameters<typeof getRecipe>[1]) =>
+    getRecipe(await this.auth.authenticate(), id);
 }
 
 class User {
@@ -88,6 +100,7 @@ export class Yazio {
   private auth: YazioAuth;
 
   public products: Products;
+  public recipes: Recipes;
   public user: User;
 
   /**
@@ -101,6 +114,7 @@ export class Yazio {
     this.auth = auth instanceof YazioAuth ? auth : new YazioAuth(auth);
 
     this.products = new Products(this.auth);
+    this.recipes = new Recipes(this.auth);
     this.user = new User(this.auth);
   }
 }
