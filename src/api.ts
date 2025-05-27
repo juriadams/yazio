@@ -2,6 +2,7 @@ export { getTokenFromCredentials } from "@/api/oauth/token";
 
 export { getProduct } from "@/api/products";
 export { searchProducts } from "@/api/products/search";
+export { getRecipe } from "@/api/recipes";
 
 export {
   getUserConsumedItems,
