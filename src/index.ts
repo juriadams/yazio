@@ -14,6 +14,9 @@ import {
   getUserSuggestedProducts,
   getUserWaterIntake,
   getUserWeight,
+  getRecipe,
+  getUserRecipeIds,
+  deleteUserRecipe,
   searchProducts,
   getUserDailySummary,
   addUserConsumedItem,
@@ -54,25 +57,25 @@ class User {
     getUserDietaryPreferences(await this.auth.authenticate());
 
   public getExercises = async (
-    options: Parameters<typeof getUserExercises>[1]
+    options?: Parameters<typeof getUserExercises>[1]
   ) => getUserExercises(await this.auth.authenticate(), options);
 
-  public getGoals = async (options: Parameters<typeof getUserGoals>[1]) =>
+  public getGoals = async (options?: Parameters<typeof getUserGoals>[1]) =>
     getUserGoals(await this.auth.authenticate(), options);
 
   public getSettings = async () =>
     getUserSettings(await this.auth.authenticate());
 
   public getWaterIntake = async (
-    options: Parameters<typeof getUserWaterIntake>[1]
+    options?: Parameters<typeof getUserWaterIntake>[1]
   ) => getUserWaterIntake(await this.auth.authenticate(), options);
 
   public getDailySummary = async (
-    options: Parameters<typeof getUserDailySummary>[1]
+    options?: Parameters<typeof getUserDailySummary>[1]
   ) => getUserDailySummary(await this.auth.authenticate(), options);
 
   public getConsumedItems = async (
-    options: Parameters<typeof getUserConsumedItems>[1]
+    options?: Parameters<typeof getUserConsumedItems>[1]
   ) => getUserConsumedItems(await this.auth.authenticate(), options);
 
   public addConsumedItem = async (
@@ -82,6 +85,15 @@ class User {
   public removeConsumedItem = async (
     options: Parameters<typeof removeUserConsumedItem>[1]
   ) => removeUserConsumedItem(await this.auth.authenticate(), options);
+
+  public getRecipe = async (id: Parameters<typeof getRecipe>[1]) =>
+    getRecipe(await this.auth.authenticate(), id);
+
+  public getRecipeIds = async () =>
+    getUserRecipeIds(await this.auth.authenticate());
+
+  public deleteRecipe = async (id: Parameters<typeof deleteUserRecipe>[1]) =>
+    deleteUserRecipe(await this.auth.authenticate(), id);
 }
 
 export class Yazio {

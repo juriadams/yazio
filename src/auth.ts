@@ -5,7 +5,10 @@ export type {
   CredentialsResolver,
 } from "@/types/auth";
 
-import { getTokenFromCredentials } from "@/api/oauth/token";
+import {
+  getTokenFromCredentials,
+  getTokenFromRefreshToken,
+} from "@/api/oauth/token";
 import {
   YazioAuthInitSchema,
   type CredentialsResolver,
@@ -65,22 +68,31 @@ export class YazioAuth {
       return token;
     }
 
+    // If we have an expired token with refresh_token, try to refresh first.
+    const tokenToRefresh = token ?? this.cachedToken;
+    if (tokenToRefresh?.refresh_token) {
+      try {
+        const refreshedToken =
+          await getTokenFromRefreshToken(tokenToRefresh.refresh_token);
+        this.cachedToken = refreshedToken;
+        this.token = refreshedToken;
+        if (this.onRefresh) this.onRefresh({ token: refreshedToken });
+        return refreshedToken;
+      } catch {
+        // Refresh failed (e.g. refresh_token revoked); fall through to credentials.
+      }
+    }
+
     const credentials = await resolveCredentials(this.credentials);
     if (!credentials)
       throw new Error(
         "Unable to resolve credentials. Please make sure `credentials` is passed correctly."
       );
 
-    // If only credentials were provided or if the token expired, fetch a
-    // fresh one.
-    // TODO (@juriadams): Investigate if tere is an endpoint for refreshing
-    // tokens instead of fetching new ones every time.
-    const refreshedToken = await getTokenFromCredentials(credentials!);
+    const refreshedToken = await getTokenFromCredentials(credentials);
+    this.cachedToken = refreshedToken;
     this.token = refreshedToken;
-
-    // If a custom `onRefresh` handler is set, invoke it.
     if (this.onRefresh) this.onRefresh({ token: refreshedToken });
-
     return refreshedToken;
   };
 

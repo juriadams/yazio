@@ -25,6 +25,40 @@ export const UserConsumedItemSchema = z.object({
 
 export type UserConsumedItem = z.infer<typeof UserConsumedItemSchema>;
 
+export const RecipePortionConsumedItemSchema = z.object({
+  id: z.string().uuid(),
+  date: z.string(),
+  daytime: DaytimeSchema,
+  type: z.literal("recipe_portion"),
+  recipe_id: z.string().uuid(),
+  portion_count: z.number(),
+});
+export type RecipePortionConsumedItem = z.infer<
+  typeof RecipePortionConsumedItemSchema
+>;
+
+export const SimpleProductConsumedItemSchema = z.object({
+  id: z.string().uuid(),
+  date: z.string(),
+  daytime: DaytimeSchema,
+  type: z.literal("simple_product"),
+  name: z.string(),
+  nutrients: z.record(z.string(), z.number()),
+  is_ai_generated: z.boolean(),
+});
+export type SimpleProductConsumedItem = z.infer<
+  typeof SimpleProductConsumedItemSchema
+>;
+
+export const GetUserConsumedItemsResponseSchema = z.object({
+  products: z.array(UserConsumedItemSchema),
+  recipe_portions: z.array(RecipePortionConsumedItemSchema),
+  simple_products: z.array(SimpleProductConsumedItemSchema),
+});
+export type GetUserConsumedItemsResponse = z.infer<
+  typeof GetUserConsumedItemsResponseSchema
+>;
+
 /**
  * Get the consumed items of the user, optionally for a specific day.
  *
@@ -36,13 +70,8 @@ export type UserConsumedItem = z.infer<typeof UserConsumedItemSchema>;
 export const getUserConsumedItems = async (
   token: Token,
   options?: GetUserConsumedItemsOptions
-): Promise<{
-  products: Array<UserConsumedItem>;
-  // TODO (@juriadams): Type recipes.
-  recipe_portions: Array<unknown>;
-  simple_products: Array<unknown>;
-}> =>
-  fetchYazio(
+): Promise<GetUserConsumedItemsResponse> =>
+  fetchYazio<GetUserConsumedItemsResponse>(
     `/user/consumed-items?date=${parseDate(options?.date ?? new Date())}`,
     {
       headers: {

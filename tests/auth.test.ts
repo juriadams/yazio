@@ -83,6 +83,35 @@ describe("auth", () => {
     });
   });
 
+  describe("token refresh", () => {
+    test("uses refresh_token when token expired and credentials available", async () => {
+      const authWithCreds = new YazioAuth({
+        credentials: {
+          username: Bun.env.YAZIO_USERNAME!,
+          password: Bun.env.YAZIO_PASSWORD!,
+        },
+      });
+      const firstToken = await authWithCreds.authenticate();
+      expect(firstToken.refresh_token).toBeDefined();
+
+      const expiredToken: Token = {
+        ...firstToken,
+        expires_at: Date.now() - 1000,
+      };
+      const authWithExpiredToken = new YazioAuth({
+        credentials: {
+          username: Bun.env.YAZIO_USERNAME!,
+          password: Bun.env.YAZIO_PASSWORD!,
+        },
+        token: expiredToken,
+      });
+      const refreshed = await authWithExpiredToken.authenticate();
+      const parsed = TokenSchema.safeParse(refreshed);
+      expect(parsed.success).toBe(true);
+      expect(refreshed.access_token).not.toBe(expiredToken.access_token);
+    });
+  });
+
   describe("token", () => {
     test("directly passing a token", async () => {
       const auth = new YazioAuth({

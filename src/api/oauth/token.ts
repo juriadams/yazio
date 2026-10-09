@@ -37,3 +37,35 @@ export const getTokenFromCredentials = async (
     expires_at: Date.now() + token.expires_in * 1000,
   };
 };
+
+/**
+ * Refresh an access token using a refresh token.
+ * Uses the same /oauth/token endpoint with grant_type: "refresh_token".
+ *
+ * @param refreshToken - The refresh_token from a previous auth response.
+ *
+ * @returns - Promise resolving to a new Token (access_token, refresh_token, expires_in).
+ */
+export const getTokenFromRefreshToken = async (
+  refreshToken: string
+): Promise<Token> => {
+  if (!refreshToken)
+    throw new Error("Missing refresh_token. Cannot refresh.");
+
+  const token = await fetchYazio<
+    Pick<Token, "token_type" | "access_token" | "refresh_token" | "expires_in">
+  >(`/oauth/token`, {
+    method: "POST",
+    body: JSON.stringify({
+      client_id: YAZIO_CLIENT_ID,
+      client_secret: YAZIO_CLIENT_SECRET,
+      refresh_token: refreshToken,
+      grant_type: "refresh_token",
+    }),
+  });
+
+  return {
+    ...token,
+    expires_at: Date.now() + token.expires_in * 1000,
+  };
+};

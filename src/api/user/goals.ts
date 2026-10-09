@@ -9,7 +9,7 @@ const GetUserGoalsOptionsSchema = z.object({
 
 type GetUserGoalsOptions = z.infer<typeof GetUserGoalsOptionsSchema>;
 
-const UserGoalsSchema = z.object({
+export const UserGoalsSchema = z.object({
   "energy.energy": z.number(),
   "nutrient.protein": z.number(),
   "nutrient.fat": z.number(),

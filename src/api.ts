@@ -1,4 +1,7 @@
-export { getTokenFromCredentials } from "@/api/oauth/token";
+export {
+  getTokenFromCredentials,
+  getTokenFromRefreshToken,
+} from "@/api/oauth/token";
 
 export { getProduct } from "@/api/products";
 export { searchProducts } from "@/api/products/search";
@@ -17,4 +20,9 @@ export { getUserGoals } from "@/api/user/goals";
 export { getUserSettings } from "@/api/user/settings";
 export { getUserDailySummary } from "@/api/user/summary";
 export { getUserWaterIntake } from "@/api/user/water";
+export {
+  getRecipe,
+  getUserRecipeIds,
+  deleteUserRecipe,
+} from "@/api/user/recipes";
 export { getUser } from "@/api/user";
